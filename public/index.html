@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI Trading Signals</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">Educational trading dashboard</p>
+          <h1>AI Trading Signals</h1>
+        </div>
+        <button id="refreshButton" class="primary-button">Refresh signals</button>
+      </header>
+
+      <section class="summary-row">
+        <div class="summary-card warning-box">
+          <strong>Risk notice</strong>
+          <p>Signals are educational only. No broker connection, real-money execution, or automatic trading is used.</p>
+        </div>
+      </section>
+
+      <main class="dashboard">
+        <section class="panel">
+          <div class="panel-header">
+            <h2>Market signals</h2>
+            <span id="generatedAt" class="muted-text">Loading...</span>
+          </div>
+          <div id="marketGrid" class="market-grid"></div>
+        </section>
+
+        <aside class="panel">
+          <div class="panel-header">
+            <h2>Historical signal log</h2>
+          </div>
+          <ul id="historyList" class="history-list"></ul>
+          <p class="muted-text small">
+            Hypothetical outcomes are not a promise of future profit or a verified trading result.
+          </p>
+        </aside>
+      </main>
+    </div>
+
+    <script src="/app.js"></script>
+  </body>
+</html>

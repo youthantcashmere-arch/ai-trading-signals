@@ -1,0 +1,256 @@
+:root {
+  --bg: #081018;
+  --bg-soft: #101c2b;
+  --panel: #122231;
+  --panel-alt: #142f40;
+  --text: #edf4ff;
+  --muted: #9bb0ca;
+  --border: rgba(173, 198, 226, 0.14);
+  --buy: #2ecc71;
+  --sell: #ff5d73;
+  --hold: #f5b841;
+  --neutral: #7aa9ff;
+  --danger: #ff8b8b;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background: linear-gradient(180deg, #081018, #0b1726 40%, #0f1d30);
+  color: var(--text);
+}
+
+.page-shell {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px 16px 40px;
+}
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.eyebrow {
+  margin: 0 0 6px;
+  color: var(--muted);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+h1, h2, p {
+  margin-top: 0;
+}
+
+h1 {
+  margin-bottom: 0;
+  font-size: clamp(1.9rem, 3vw, 2.8rem);
+}
+
+.primary-button {
+  appearance: none;
+  border: none;
+  border-radius: 12px;
+  padding: 12px 18px;
+  background: var(--neutral);
+  color: #041015;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.summary-row {
+  display: grid;
+  grid-template-columns: 1fr;
+  margin-bottom: 18px;
+}
+
+.summary-card {
+  background: rgba(255, 184, 87, 0.09);
+  border: 1px solid rgba(245, 184, 65, 0.2);
+  border-radius: 16px;
+  padding: 16px;
+}
+
+.warning-box p {
+  margin-bottom: 0;
+  color: var(--text);
+}
+
+.dashboard {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 18px;
+}
+
+.panel {
+  background: rgba(18, 34, 49, 0.94);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 18px;
+}
+
+.panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.market-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 14px;
+}
+
+.market-card {
+  background: linear-gradient(180deg, rgba(20, 47, 64, 0.9), rgba(18, 34, 49, 1));
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 18px;
+}
+
+.market-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.market-symbol {
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.signal-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 80px;
+  padding: 8px 10px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.signal-buy {
+  background: rgba(46, 204, 113, 0.2);
+  color: var(--buy);
+}
+
+.signal-sell {
+  background: rgba(255, 93, 115, 0.2);
+  color: var(--sell);
+}
+
+.signal-hold {
+  background: rgba(245, 184, 65, 0.2);
+  color: var(--hold);
+}
+
+.signal-unavailable {
+  background: rgba(122, 169, 255, 0.18);
+  color: var(--neutral);
+}
+
+.price-label {
+  color: var(--muted);
+  font-size: 0.8rem;
+  margin-bottom: 4px;
+}
+
+.price-value {
+  font-size: 1.7rem;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.meta-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 6px;
+  font-size: 0.82rem;
+  color: var(--muted);
+}
+
+.meta-list strong {
+  color: var(--text);
+}
+
+.explanation {
+  margin-top: 12px;
+  color: var(--text);
+  line-height: 1.5;
+  font-size: 0.9rem;
+}
+
+.status-live {
+  color: var(--buy);
+}
+
+.status-delayed {
+  color: var(--hold);
+}
+
+.status-stale,
+.status-unavailable {
+  color: var(--danger);
+}
+
+.history-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 12px;
+}
+
+.history-item {
+  background: rgba(18, 34, 49, 0.8);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px;
+}
+
+.history-item .top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.muted-text {
+  color: var(--muted);
+}
+
+.small {
+  font-size: 0.82rem;
+}
+
+@media (max-width: 780px) {
+  .dashboard {
+    grid-template-columns: 1fr;
+  }
+
+  .topbar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .primary-button {
+    width: 100%;
+  }
+}
