@@ -1,9 +1,3 @@
-const forexConfig = {
-  'EUR/USD': { from: 'EUR', to: 'USD' },
-  'GBP/USD': { from: 'GBP', to: 'USD' },
-  'USD/JPY': { from: 'USD', to: 'JPY' }
-};
-
 const cryptoConfig = {
   'BTC/USD': { id: 'bitcoin', currency: 'usd' },
   'ETH/USD': { id: 'ethereum', currency: 'usd' }
@@ -19,12 +13,12 @@ async function fetchJson(url, timeoutMs, retries = 2) {
   for (let attempt = 0; attempt <= retries; attempt += 1) {
     try {
       const controller = new AbortController();
-      const timeout = setTimeout(() => controller.abort(), timeoutMs);
+      const timeoutHandle = setTimeout(() => controller.abort(), timeoutMs);
       const response = await fetch(url, {
         headers: { Accept: 'application/json' },
         signal: controller.signal
       });
-      clearTimeout(timeout);
+      clearTimeout(timeoutHandle);
 
       if (response.status === 429) {
         const retryAfter = Number(response.headers.get('retry-after') || 2);
@@ -51,77 +45,6 @@ async function fetchJson(url, timeoutMs, retries = 2) {
   throw lastError || new Error('Market fetch failed.');
 }
 
-function formatDate(date) {
-  return date.toISOString().slice(0, 10);
-}
-
-export async function fetchForexMarket(symbol, timeoutMs = 15000) {
-  const config = forexConfig[symbol];
-
-  if (!config) {
-    return {
-      symbol,
-      provider: 'Frankfurter API',
-      status: 'unavailable',
-      timestamp: null,
-      message: `Forex pair ${symbol} is not supported by this adapter.`
-    };
-  }
-
-  try {
-    const latestResponse = await fetchJson(`https://api.frankfurter.app/latest?from=${config.from}&to=${config.to}`, timeoutMs);
-    const currencyDates = latestResponse?.date || new Date().toISOString().slice(0, 10);
-    const currentQuote = Number(latestResponse?.rates?.[config.to]);
-
-    if (!Number.isFinite(currentQuote) || currentQuote <= 0) {
-      return {
-        symbol,
-        provider: 'Frankfurter API',
-        status: 'unavailable',
-        timestamp: null,
-        message: 'Forex quote is missing or invalid.'
-      };
-    }
-
-    const endDate = new Date();
-    const startDate = new Date();
-    startDate.setDate(endDate.getDate() - 30);
-
-    const historyResponse = await fetchJson(
-      `https://api.frankfurter.app/${formatDate(startDate)}..${formatDate(endDate)}?from=${config.from}&to=${config.to}`,
-      timeoutMs
-    );
-
-    const history = Object.entries(historyResponse?.rates || {})
-      .map(([date, value]) => ({
-        date,
-        price: Number(value[config.to])
-      }))
-      .filter((point) => Number.isFinite(point.price))
-      .sort((a, b) => new Date(a.date) - new Date(b.date));
-
-    const ageMinutes = Math.max(0, (Date.now() - new Date(`${currencyDates}T12:00:00Z`).getTime()) / 60000);
-
-    return {
-      symbol,
-      provider: 'Frankfurter API',
-      status: ageMinutes <= 5 ? 'live' : ageMinutes <= 30 ? 'delayed' : 'stale',
-      timestamp: new Date(`${currencyDates}T12:00:00Z`).toISOString(),
-      price: currentQuote,
-      history,
-      notes: 'Frankfurter provides free FX reference rates without requiring an API key.'
-    };
-  } catch (error) {
-    return {
-      symbol,
-      provider: 'Frankfurter API',
-      status: 'unavailable',
-      timestamp: null,
-      message: `Forex data could not be loaded: ${error.message}`
-    };
-  }
-}
-
 export async function fetchCryptoMarket(symbol, timeoutMs = 15000) {
   const config = cryptoConfig[symbol];
 
@@ -140,6 +63,7 @@ export async function fetchCryptoMarket(symbol, timeoutMs = 15000) {
       `https://api.coingecko.com/api/v3/simple/price?ids=${config.id}&vs_currencies=usd&include_24hr_change=true`,
       timeoutMs
     );
+
     const marketData = currentResponse?.[config.id];
     const currentPrice = Number(marketData?.usd);
 
